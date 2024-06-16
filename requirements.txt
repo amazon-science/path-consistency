@@ -1,0 +1,11 @@
+filterpy==1.4.5
+lap==0.4.0
+motmetrics==1.4.0
+numpy==1.24.3
+pandas==2.0.1
+scipy==1.9.1
+skimage==0.0
+torch==1.12.0
+tqdm==4.65.0
+wandb==0.15.3
+yacs==0.1.8

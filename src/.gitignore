@@ -1,0 +1,6 @@
+*.pyc
+.nfs*
+.vscode/*
+
+results
+server_scripts
