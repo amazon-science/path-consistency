@@ -2,5 +2,6 @@
 .nfs*
 .vscode/*
 
-results
-server_scripts
+log/
+data/
+output/

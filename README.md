@@ -27,10 +27,18 @@ Results will be saved at `log/mot/1`. `ckpts` folder stores model weights. `save
 
 ## Evaluate model
 ```bash
-python -m src.inference_mot --gpu $GPUID --exp log/mot/1
+python -m src.inference_mot --gpu $GPUID --exp log/mot17/public/all/mot/1/
 ```
 This will evaluate model on MOT17 train and test videos, save results to `output/MOT17`, and print the accuracy for training videos. Accuracy for test videos can be obtained by submitting to MOT17 server.
-Pretrained model will be shared shortly.
+
+## Pretrained Model
+Pretrained model and results can be downloaded from [drive](https://drive.google.com/file/d/1R5hCZ32fX128ciezeaYr42AzAnjUccd6/view?usp=sharing). It contains `log` and `output` folders with the following performance:
+
+|              | MOTA | IDF1 | IDSW |
+|--------------|------|------|------|
+| Train Videos | 64.8 | 69.0 | 542  |
+| Test Videos  | 58.8 | 61.0 | 1162 |
+
 
 ## In Progress
 The training configs for PersonPath and KITTI are exactly the same as defined in `src/configs/mot.yaml` except we set `pcl.G=20`. Unfortunately, we lost the data and model weights in a disk failure and need some time to replicate them. 
