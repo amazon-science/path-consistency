@@ -27,16 +27,20 @@ git clone https://github.com/JonathonLuiten/TrackEval.git
 
 ## Train model
 ```bash
-python -m src.train --cfg src/configs/mot.yaml --set aux.gpu $GPUID aux.runid 1 # train MOT17
-python -m src.train --cfg src/configs/personpath_fcos.yaml --set aux.gpu $GPUID aux.runid 1 # train PersonPath22
+# train MOT17
+python -m src.train --cfg src/configs/mot.yaml --set aux.gpu $GPUID aux.runid 1
+# train PersonPath22
+python -m src.train --cfg src/configs/personpath_fcos.yaml --set aux.gpu $GPUID aux.runid 1 
 ```
 For example, the first command will train model on MOT17 public detections. Following prior works, the detections are refined by Tracktor++.
 Results will be saved under `log`, where `ckpts` folder stores model weights. `saves` folder stores the accuracy of learned matching probability. Losses and accuracies are also visualized via wandb.
 
 ## Evaluate model
 ```bash
-python -m src.inference_mot --gpu $GPUID --exp log/mot17/public/all/mot/1/ # eval MOT17
-python -m src.inference_personpath --gpu $GPUID --exp log/personpath22/fcos_processed/all/personpath_fcos-replicate/1/ # eval PersonPath22
+# eval MOT17
+python -m src.inference_mot --gpu $GPUID --exp log/mot17/public/all/mot/1/
+# eval PersonPath22
+python -m src.inference_personpath --gpu $GPUID --exp log/personpath22/fcos_processed/all/personpath_fcos-replicate/1/ 
 ```
 The first command will evaluate model on MOT17 videos, save results to `output/MOT17`, and print the accuracy for training videos. Accuracy for test videos can be obtained by submitting to MOT17 server.
 
