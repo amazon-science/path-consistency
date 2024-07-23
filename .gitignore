@@ -1,3 +1,7 @@
 *.pyc
 .nfs*
 .vscode/*
+
+log/
+data/
+output/

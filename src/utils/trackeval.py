@@ -16,6 +16,7 @@ import pandas as pd
 
 BASE = get_project_base()
 sys.path.insert(0, os.path.join(BASE, 'libs/TrackEval/'))
+np.int = int # HACK, for backward compatibility
 
 import trackeval
 from trackeval.datasets._base_dataset import _BaseDataset
@@ -338,18 +339,10 @@ class PersonPath22(_BaseDataset):
         # Get sequences to eval and check gt files exist
         self.seq_list = []
         self.seq_lengths = {}
-        # self.seq_list, self.seq_lengths = self._get_seq_info()
-        # if len(self.seq_list) < 1:
-        #     raise TrackEvalException('No sequences are selected to be evaluated.')
 
         self.tracker_list = self.config['TRACKERS_TO_EVAL']
         self.tracker_to_disp = dict(zip(self.tracker_list, self.tracker_list))
 
-        #########################
-        # self.distractor_class_names = ['person_on_vehicle', 'static_person', 'distractor', 'reflection']
-        # self.distractor_class_names += ['car', 'crowd', 'bicycle', 'motorbike', 'non_mot_vehicle', 'occluder_full', 'occluder', 'occluder_on_ground' ]
-        # keep = [ k for k in self.class_name_to_class_id if k not in self.distractor_class_names ]
-        # print(keep)
 
     def set_pred_videos(self, pred_video_dict):
         self.pred_video_dict = pred_video_dict
@@ -370,16 +363,6 @@ class PersonPath22(_BaseDataset):
         seq_list = list(self.pred_video_dict.keys())
         seq_lengths = { k: self.TEST_SEQ_LENGTH[k] for k in seq_list }
         return seq_list, seq_lengths
-
-    # def _get_seq_info(self):
-    #     # import ipdb; ipdb.set_trace()
-
-    #     fname = f'/home/zijia/raptor/Track/libs/TrackEval/data/gt/person_path_22/{self.config["SPLIT_TO_EVAL"]}_video_info.json'
-    #     # fname = f'/home/zijia/raptor/Track/TrackEval/data/gt/person_path_22/video_info.json'
-    #     with open(fname) as fp:
-    #         seq_lengths = json.load(fp)
-    #     seq_list = list(seq_lengths.keys())
-    #     return seq_list, seq_lengths
 
     def _load_simple_text_file_from_string(self, string, crowd_ignore_filter=None, 
                                         time_col=0, id_col=None, 
@@ -456,19 +439,6 @@ class PersonPath22(_BaseDataset):
         [tracker_ids, tracker_classes, tracker_confidences] : list (for each timestep) of 1D NDArrays (for each det).
         [tracker_dets]: list (for each timestep) of lists of detections.
         """
-        # File location
-        # if self.data_is_zipped:
-        #     if is_gt:
-        #         zip_file = os.path.join(self.gt_fol, 'data.zip')
-        #     else:
-        #         zip_file = os.path.join(self.tracker_fol, tracker, self.tracker_sub_fol + '.zip')
-        #     file = seq + '.txt'
-        # else:
-        #     zip_file = None
-        #     if is_gt:
-        #         file = self.config["GT_LOC_FORMAT"].format(gt_folder=self.gt_fol, seq=seq)
-        #     else:
-        #         file = os.path.join(self.tracker_fol, tracker, self.tracker_sub_fol, seq + '.txt')
 
         # Ignore regions
         if is_gt:
@@ -487,10 +457,6 @@ class PersonPath22(_BaseDataset):
             if not isinstance(seq_video, str):
                 seq_video = seq_video.to_mot()
 
-        # if not isinstance(seq_video, str):
-        #     string = seq_video.to_mot()
-        # else:
-        #     string = seq_video
 
         read_data, ignore_data = self._load_simple_text_file_from_string(seq_video, crowd_ignore_filter=crowd_ignore_filter)
 
@@ -756,7 +722,7 @@ evaluator_config = {
  'NUM_PARALLEL_CORES': 8,
  'BREAK_ON_ERROR': True,
  'RETURN_ON_ERROR': False,
- 'LOG_ON_ERROR': '/mnt/raptor/zijia/Track/libs/TrackEval/error_log.txt',
+ 'LOG_ON_ERROR': os.path.join(BASE, 'libs/TrackEval/error_log.txt'),
  'PRINT_RESULTS': False,
  'PRINT_ONLY_COMBINED': False,
  'PRINT_CONFIG': False,
@@ -1066,36 +1032,6 @@ class Kitti2DBox(_BaseDataset):
         for k, v in self._TESTING_SEQ_MAP.items():
             self.full_seq_lengths['testing-'+k] = v
 
-        # if self.config['SPLIT_TO_EVAL'] == 'training':
-        #     self.seq_list = list(self._TRAINING_SEQ_MAP.keys())
-        #     self.seq_lengths = self._TRAINING_SEQ_MAP
-        # if self.config['SPLIT_TO_EVAL'] == 'testing':
-        #     self.seq_list = list(self._TESTING_SEQ_MAP.keys())
-        #     self.seq_lengths = self._TESTING_SEQ_MAP
-
-        # self.seq_list = []
-        # self.seq_lengths = {}
-        # seqmap_name = 'evaluate_tracking.seqmap.' + self.config['SPLIT_TO_EVAL']
-        # seqmap_file = os.path.join(self.gt_fol, seqmap_name)
-        # if not os.path.isfile(seqmap_file):
-        #     raise TrackEvalException('no seqmap found: ' + os.path.basename(seqmap_file))
-        # with open(seqmap_file) as fp:
-        #     dialect = csv.Sniffer().sniff(fp.read(1024))
-        #     fp.seek(0)
-        #     reader = csv.reader(fp, dialect)
-        #     for row in reader:
-        #         if len(row) >= 4:
-        #             seq = row[0]
-        #             self.seq_list.append(seq)
-        #             self.seq_lengths[seq] = int(row[3])
-        #             if not self.data_is_zipped:
-        #                 curr_file = os.path.join(self.gt_fol, 'label_02', seq + '.txt')
-        #                 if not os.path.isfile(curr_file):
-        #                     raise TrackEvalException('GT file not found: ' + os.path.basename(curr_file))
-        #     if self.data_is_zipped:
-        #         curr_file = os.path.join(self.gt_fol, 'data.zip')
-        #         if not os.path.isfile(curr_file):
-        #             raise TrackEvalException('GT file not found: ' + os.path.basename(curr_file))
 
         # Get trackers to eval
         if self.config['TRACKERS_TO_EVAL'] is None:
@@ -1104,25 +1040,6 @@ class Kitti2DBox(_BaseDataset):
             self.tracker_list = self.config['TRACKERS_TO_EVAL']
 
         self.tracker_to_disp = dict(zip(self.tracker_list, self.tracker_list))
-        # if self.config['TRACKER_DISPLAY_NAMES'] is None:
-        # elif (self.config['TRACKERS_TO_EVAL'] is not None) and (
-        #         len(self.config['TRACKER_DISPLAY_NAMES']) == len(self.tracker_list)):
-        #     self.tracker_to_disp = dict(zip(self.tracker_list, self.config['TRACKER_DISPLAY_NAMES']))
-        # else:
-        #     raise TrackEvalException('List of tracker files and tracker display names do not match.')
-
-        # for tracker in self.tracker_list:
-        #     if self.data_is_zipped:
-        #         curr_file = os.path.join(self.tracker_fol, tracker, self.tracker_sub_fol + '.zip')
-        #         if not os.path.isfile(curr_file):
-        #             raise TrackEvalException('Tracker file not found: ' + tracker + '/' + os.path.basename(curr_file))
-        #     else:
-        #         for seq in self.seq_list:
-        #             curr_file = os.path.join(self.tracker_fol, tracker, self.tracker_sub_fol, seq + '.txt')
-        #             if not os.path.isfile(curr_file):
-        #                 raise TrackEvalException(
-        #                     'Tracker file not found: ' + tracker + '/' + self.tracker_sub_fol + '/' + os.path.basename(
-        #                         curr_file))
 
     def set_pred_videos(self, pred_video_dict):
         self.pred_video_dict = pred_video_dict
@@ -1576,20 +1493,6 @@ class KITTI_TrackBundle():
             self.results = [res, full_res]
 
         return self.metric
-
-    # def save(self, folder, vnames=None, metric_fname='metric'):
-    #     if vnames is None:
-    #         vnames = list(self._tracked_dict.keys())
-
-    #     for vname in vnames:
-    #         fname = os.path.join(folder, vname+'.txt')
-    #         video = self.get_video(vname)
-    #         video.to_mot(fname)
-        
-    #     if metric_fname:
-    #         metric_csv = os.path.join(folder, metric_fname+'.csv')
-    #         self.get_df()
-    #         self.complete_metric_df.to_csv(metric_csv)
 
 def get_total_bbox(keep, remove):
     nbbox = {}

@@ -6,6 +6,6 @@ pandas==2.0.1
 scipy==1.9.1
 skimage==0.0
 torch==1.13.1
-tqdm==4.65.0
+tqdm==4.66.3
 wandb==0.15.3
 yacs==0.1.8

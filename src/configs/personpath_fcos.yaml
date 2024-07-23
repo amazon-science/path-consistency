@@ -1,0 +1,69 @@
+CNET:
+  cmp: c2s
+  dropout: 0.0
+  hdim: 64
+  layers: 2
+  normalize: false
+  skq: true
+INET:
+  dropout: 0.0
+  hdim: 64
+  layers: 6
+  stride: 2
+TNET:
+  attn_dropout: 0.0
+  ca_pos: true
+  calayers: 0
+  dropout: 0.0
+  ffndim: 512
+  hdim: 128
+  nhead: 8
+  salayers: 2
+  w: 4
+aux:
+  debug: false
+  eval_every: 1000
+  gpu: 0
+  print_every: 200
+  resume: max
+  runid: 1
+  skip_finished: true
+  wandb_project: personpath
+batch_size: 1
+da:
+  clw: 0.5
+  cs: 0.075
+  cs_min: 0.025
+  enable: true
+  flip: false
+  scale: 2
+  size: 64
+  zm: 0.0
+dataset: personpath22
+det: ''
+epoch: 35
+fdr: fcos_processed
+lr: 0.0001
+model:
+  clip_len: 48
+  cnet: attn
+  include_confi: true
+  inet: cnn
+  mask_inp: None
+  null_offset: true
+  step_size: 1
+  tnet: tsmr
+mreg:
+  nullw: 0.0
+  w: 1.0
+optimizer: Adam
+pcl:
+  G: 20
+  M: sqrt
+  ift: 4
+  max_s: 64
+  w: 1.0
+split: all
+tcl:
+  w: 1.0
+weight_decay: 0.0

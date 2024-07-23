@@ -26,6 +26,8 @@ if __name__ == '__main__':
         print(e)
         os.environ['CUDA_VISIBLE_DEVICES'] = str(args.gpu)
 
+    os.makedirs(os.path.join(args.dst, 'MOT17'), exist_ok=True)
+
     expfolder = args.exp
     exp = eval_tools.ExpRun(expfolder)
     metric = '01-08.acc' # select a checkpoint based on association accuracy on training data
